@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     val RESULT_1="Result #1"
+    val RESULT_2="Result #2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +34,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private suspend fun fakeApiResult(){
-        val result=getResult1FromApi()
-        setTextOnMainThread(result)
+        val result1=getResult1FromApi()
+        setTextOnMainThread(result1)
+
+        val result2=getResult2FromApi()
+        setTextOnMainThread(result2)
 
 
+    }
+    private suspend fun getResult2FromApi():String{
+        logThread("getResult2FromApi")
+        delay(1000)
+        return RESULT_2
     }
     private suspend fun getResult1FromApi():String{
         logThread("getResult1FromApi")
