@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-
+//This activity is for learning and practicing JOBS
 class Main2Activity : AppCompatActivity() {
     val PROGRESS_END=100
     val PROGRESS_START=0
@@ -32,6 +32,7 @@ class Main2Activity : AppCompatActivity() {
         }
         else{
             job_button.setText("Cancel Job")
+            //IO + job make this task completely independently..
             CoroutineScope(IO+job).launch {
                 println("Coroutine is active $this with the job $job")
                 for (i in PROGRESS_START..PROGRESS_END){

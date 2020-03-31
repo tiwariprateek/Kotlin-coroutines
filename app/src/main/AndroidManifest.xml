@@ -9,9 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Main2Activity">
-            <!--Activity MainActivity should also be mentioned in this Manifest.xml like this if
+        <activity android:name=".Main3Activity">
+            <!--
+        Activity MainActivity should also be mentioned in this Manifest.xml like this if
             We want it to be the first activity when the app starts
+            same goes for the Main2Activity
+            <activity android:name=".Main2Activity"></activity>
             <activity android:name=".MainActivivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
