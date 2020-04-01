@@ -16,9 +16,23 @@ class Main4Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main4)
         main()
+        //executeApirequest()
         button3.setOnClickListener {
             textView3.setText((count++).toString())
         }
+    }
+    private fun executeApirequest(){
+        CoroutineScope(Main).launch {//Parent Job
+            for (i in 1..100_000)
+                launch { fakeApiRequest() }//Child Job
+
+        }
+
+    }
+    private suspend fun fakeApiRequest(){
+        println("Started Network request !")
+        delay(3000)
+        println("Received result")
     }
     fun main(){
         CoroutineScope(Main).launch {
