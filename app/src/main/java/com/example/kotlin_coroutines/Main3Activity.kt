@@ -16,10 +16,27 @@ class Main3Activity : AppCompatActivity() {
         setContentView(R.layout.activity_main3)
         button2.setOnClickListener {
             button2.setText("Clicked")
-            fakeApiRequest2()
-
+            //fakeApiRequest2()
             //fakeApiRequest1()
+            fakeApiRequest3()
         }
+    }
+    private fun fakeApiRequest3(){
+        CoroutineScope(IO).launch {
+            val executionTime= measureTimeMillis {
+                val result1=async {
+                    println("Debug : Launching job1 on ${Thread.currentThread().name}")
+                    getResult3FromApi()
+                }.await()
+                val result2=async {
+                    println("Debug : Launching job2 on ${Thread.currentThread().name}")
+                    getResult4FromApi(result1)
+                }.await()
+                println("Debug : Got result $result2")
+            }
+            println("Debug : Execution time was $executionTime")
+        }
+
     }
     private fun fakeApiRequest2(){
         CoroutineScope(IO).launch {
@@ -79,5 +96,17 @@ class Main3Activity : AppCompatActivity() {
     private suspend fun getResult2FromApi():String{
         delay(1700)
         return "RESULT #2"
+    }
+    private suspend fun getResult3FromApi():String{
+        delay(1000)
+        return "RESULT #1"
+    }
+    private suspend fun getResult4FromApi(result: String):String{
+        delay(1700)
+        if (result.equals("RESULT #1")) {
+            return "RESULT #2"
+        }
+        throw
+            CancellationException("Result #1 was incorrect")
     }
 }
