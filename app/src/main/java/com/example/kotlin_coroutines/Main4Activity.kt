@@ -5,6 +5,7 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main4.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
+import java.lang.Exception
 import kotlin.random.Random
 
 
@@ -18,11 +19,61 @@ class Main4Activity : AppCompatActivity() {
         //main()
         //executeApirequest()
         //someFunc()
-        anotherFunc()
+        //anotherFunc()
+        concurrency()
         button3.setOnClickListener {
             //textView3.setText((count++).toString())
-            parentjob.cancel()
+            //parentjob.cancel()
         }
+    }
+    val handler= CoroutineExceptionHandler{_,exception->
+        println("Debug : Exception is thrown in one of the Child Jobs : $exception")
+    }
+    private fun concurrency() {
+        parentjob = CoroutineScope(Main).launch(handler) {
+            val job1 = launch {
+                val result=getResult(1)
+                println("Debug : Result of first job ${result}")
+            }
+            job1.invokeOnCompletion { throwable ->
+                if (throwable != null) {
+                    println("Debug : Error getting the result of job1 $throwable")
+                }
+            }
+            val job2 = launch {
+                val result=getResult(2)
+                println("Debug : Result of second job ${result}")
+            }
+            job2.invokeOnCompletion { throwable ->
+                if (throwable != null) {
+                    println("Debug : Error getting the result of job2 $throwable")
+                }
+                val job3 = launch {
+                    val result = getResult(3)
+                    println("Debug : Result of Third job ${result}")
+                }
+                job3.invokeOnCompletion { throwable ->
+                    if (throwable != null) {
+                        println("Debug : Error getting the result of job3 $throwable")
+                    }
+                }
+            }
+        }
+        parentjob.invokeOnCompletion { throwable ->
+            if (throwable != null) {
+                println("Debug : Parent Job failed $throwable")
+            }
+            else{
+                println("Debug : Parent Job Success ")
+            }
+        }
+    }
+    private suspend fun getResult(number :Int):Int{
+        delay(number*500L)
+        if(number==2){
+            throw Exception("Debug : Error in getting the result from $number")
+        }
+        return number*2
     }
     private suspend fun work(i:Int) {
         delay(3000)

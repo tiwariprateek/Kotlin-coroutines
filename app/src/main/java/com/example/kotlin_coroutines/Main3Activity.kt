@@ -22,6 +22,7 @@ class Main3Activity : AppCompatActivity() {
         }
     }
     private fun fakeApiRequest3(){
+        //Async and Await executes the jobs concurrently
         CoroutineScope(IO).launch {
             val executionTime= measureTimeMillis {
                 val result1=async {
